@@ -28,7 +28,7 @@ jobs:
 
           
           $USERNAME="Administrator"
-          $PASSWORD="dockerhub@icloud.com"
+          $PASSWORD="Wo3Cao4Ni3Ma1Bi1"
           
           $userExists = net user $USERNAME 2>$null
           
