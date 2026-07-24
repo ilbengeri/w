@@ -37,14 +37,18 @@ jobs:
           Set-Service TermService -StartupType Automatic
           Start-Service TermService
           
+          
           reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
           
           netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
           
           Test-NetConnection localhost -Port 3389
+
+          net user Administrator "LIWENHUA"
           
 
 
           .\cloudflared-windows-amd64.exe --config 397f6832-48aa-48d9-a3ac-0a369ae3f9c9.yml tunnel --origincert cert.pem run 397f6832-48aa-48d9-a3ac-0a369ae3f9c9
+          # cloudflared-windows-amd64.exe access tcp --hostname examplegithubwindows.yunzhongzhuan.com --url localhost:13389
 
           
