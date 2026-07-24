@@ -28,7 +28,7 @@ jobs:
 
           
           $USERNAME="Administrator"
-          $PASSWORD="LIWENHUA"
+          $PASSWORD="dockerhub@icloud.com"
           $userExists = net user $USERNAME 2>$null
           if ($LASTEXITCODE -eq 0) {
               Write-Host "User exists, changing password..."
